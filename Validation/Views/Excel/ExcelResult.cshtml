@@ -1,0 +1,13 @@
+﻿@model FileModel
+@{
+    ViewData["Title"] = "Result";
+}
+
+<form asp-controller="excel" asp-action="ExcelResult" class="text-center m-5">
+    <div class="m-1">
+        <textarea rows="3" readonly class="w-75">@ViewBag.excel</textarea>
+    </div>
+    <div class="m-1">
+        <button class="btn-primary" type="submit">Назад</button>
+    </div>
+</form>

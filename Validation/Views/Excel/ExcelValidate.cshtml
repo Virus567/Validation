@@ -1,0 +1,9 @@
+﻿@model FileModel
+@{
+    ViewData["Title"] = "Excel Validation";
+}
+
+<form asp-controller="excel" asp-action="ExcelValidate" class="text-center m-5" method="post" enctype="multipart/form-data">
+    <label>Выберите excel-файл для валидации: </label>
+    <input type="file" asp-for="File"  accept=".xlsx" onchange="this.form.submit()">
+</form>

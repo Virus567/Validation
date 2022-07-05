@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+    xmlns:pkg="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
+    xmlns="urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
+    targetNamespace="urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
+    elementFormDefault="qualified">
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+        schemaLocation="commons/Common.xsd"/>
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
+        schemaLocation="commons/Package.xsd"/>
+    <xsd:element name="ImportChargesRequest">
+        <xsd:annotation>
+            <xsd:documentation>Прием необходимой для уплаты информации (начисления)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="com:RequestType">
+                    <xsd:sequence>
+                        <xsd:element ref="pkg:ChargesPackage"/>
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ImportChargesResponse" type="com:ImportPackageResponseType">
+        <xsd:annotation>
+            <xsd:documentation>Ответ на запрос приема необходимой для уплаты информации (начисления)</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+</xsd:schema>

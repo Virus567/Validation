@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+    xmlns:pkg="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
+    xmlns="urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
+    targetNamespace="urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
+    elementFormDefault="qualified" xmlns:ns1="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+    xmlns:ns2="http://roskazna.ru/gisgmp/xsd/Package/2.4.0">
+
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+        schemaLocation="commons/Common.xsd"/>
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
+        schemaLocation="commons/Package.xsd"/>
+
+    <xsd:element name="ImportPaymentsRequest">
+        <xsd:annotation>
+            <xsd:documentation>Прием информации об уплате (информация из распоряжения плательщика)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="com:RequestType">
+                    <xsd:sequence>
+                        <xsd:element ref="pkg:PaymentsPackage"/>
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ImportPaymentsResponse" type="com:ImportPackageResponseType">
+        <xsd:annotation>
+            <xsd:documentation>Ответ на запрос приема информации об уплате (информации из распоряжения плательщика)
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+</xsd:schema>

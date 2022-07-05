@@ -1,0 +1,9 @@
+﻿@model FileModel
+@{
+    ViewData["Title"] = "XML Validation";
+}
+
+<form asp-controller="xml" asp-action="XmlValidate" class="text-center m-5" method="post" enctype="multipart/form-data">
+    <label>Выберите xml-файл для валидации: </label>
+    <input type="file" asp-for="File"  accept=".xml" onchange="this.form.submit()">
+</form>
