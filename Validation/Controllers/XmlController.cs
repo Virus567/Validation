@@ -82,9 +82,9 @@ namespace Validation.Controllers
             {
                 if (reader != null)
                 {
-                    reader.Close();
-
+                    reader.Close(); 
                 }
+                System.IO.File.Delete(fullPath);
             }
             return result;
         }
