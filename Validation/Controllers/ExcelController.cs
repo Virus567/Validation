@@ -125,29 +125,6 @@ namespace Validation.Controllers
                 {
                     return $"Ошибка валидации! В строке {row.RowNumber()} должны быть заполнены либо ячейки 8 и 9, либо ячейка  10, либо ячейки 11,12, либо ячейки 13,14 и 15";
                 }
-
-                //if (row.Cell(9).Value != "" && row.Cell(10).Value != "" &&
-                //  (row.Cell(11).Value != "" || row.Cell(12).Value != ""
-                //  || row.Cell(13).Value != "" || row.Cell(14).Value != ""
-                //  || row.Cell(15).Value != "" || row.Cell(16).Value != ""))
-                //{
-                //    return $"Ошибка валидации! В строке {row.RowNumber()} должны быть заполнены либо ячейки 8 и 9, либо ячейки 10,11,12,13,14 и 15";
-                //}
-                //if (row.Cell(11).Value != "" && row.Cell(12).Value != ""
-                //  && row.Cell(13).Value != "" && row.Cell(14).Value != ""
-                //  && row.Cell(15).Value != "" && row.Cell(16).Value != "" &&
-                //    (row.Cell(9).Value != "" || row.Cell(10).Value != ""))
-                //{
-                //    return $"Ошибка валидации! В строке {row.RowNumber()} должны быть заполнены либо ячейки 8 и 9, либо ячейки 10,11,12,13,14 и 15";
-                //}
-
-                //if ((row.Cell(9).Value == "" || row.Cell(10).Value == "") &&
-                //  (row.Cell(11).Value == "" || row.Cell(12).Value == "" ||
-                //  row.Cell(13).Value == "" || row.Cell(14).Value == "" ||
-                //  row.Cell(15).Value == "" || row.Cell(16).Value == ""))
-                //{
-                //    return $"Ошибка валидации! В строке {row.RowNumber()} должны быть заполнены либо ячейки 8 и 9, либо ячейка  10, либо ячейки 11,12, либо ячейки 13,14 и 15";
-                //}
             }
 
             if (i >= 16 && i < 18)

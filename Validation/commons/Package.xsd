@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:rfnd="http://roskazna.ru/gisgmp/xsd/Refund/2.4.0"
+    xmlns:pkg="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:chg="http://roskazna.ru/gisgmp/xsd/Charge/2.4.0"
+    xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+    xmlns:pmnt="http://roskazna.ru/gisgmp/xsd/Payment/2.4.0"
+    xmlns:inc="http://roskazna.ru/gisgmp/xsd/Income/2.4.0"
+    xmlns:clrf="http://roskazna.ru/gisgmp/xsd/Clarification/2.4.0"
+    xmlns:dv="http://roskazna.ru/gisgmp/xsd/Renouncement/2.4.0"
+    xmlns="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
+    targetNamespace="http://roskazna.ru/gisgmp/xsd/Package/2.4.0" elementFormDefault="qualified">
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Charge/2.4.0" schemaLocation="Charge.xsd"/>
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" schemaLocation="Common.xsd"/>
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Payment/2.4.0" schemaLocation="Payment.xsd"/>
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Refund/2.4.0" schemaLocation="Refund.xsd"/>
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Income/2.4.0" schemaLocation="Income.xsd"/>
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Clarification/2.4.0"
+        schemaLocation="Clarification.xsd"/>
+    <xs:import namespace="http://roskazna.ru/gisgmp/xsd/Renouncement/2.4.0"
+        schemaLocation="Renouncement.xsd"/>
+    <xs:complexType name="PackageType">
+        <xs:choice>
+            <xs:element maxOccurs="100" name="ImportedCharge" type="pkg:ImportedChargeType">
+                <xs:annotation>
+                    <xs:documentation>Направляемое новое начисление</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="100" name="ImportedPayment" type="pkg:ImportedPaymentType">
+                <xs:annotation>
+                    <xs:documentation>Направляемый новый платеж</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="100" name="ImportedRefund" type="pkg:ImportedRefundType">
+                <xs:annotation>
+                    <xs:documentation>Направляемый новый возврат</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="100" name="ImportedIncome" type="pkg:ImportedIncomeType">
+                <xs:annotation>
+                    <xs:documentation>Направляемое новое зачисление</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="100" name="ImportedClarification"
+                type="pkg:ImportedClarificationType">
+                <xs:annotation>
+                    <xs:documentation>Направляемые новое уточнение вида и принадлежности платежа</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="100" name="ImportedRenouncement" type="ImportedRenouncementType">
+                <xs:annotation>
+                    <xs:documentation>Направляемое новое извещение об отказе в возбуждении ИП</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="100" name="ImportedChange" type="pkg:ImportedChangeType">
+                <xs:annotation>
+                    <xs:documentation>Направляемые изменения в ранее загруженные извещения</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="ImportedChargeType">
+        <xs:complexContent>
+            <xs:extension base="chg:ChargeType">
+                <xs:attribute name="originatorId" type="com:URNType">
+                    <xs:annotation>
+                        <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего
+                            запрос</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Id" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор начисления в пакете</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:ID">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ImportedPaymentType">
+        <xs:complexContent>
+            <xs:extension base="pmnt:PaymentType">
+                <xs:attribute name="originatorId" type="com:URNType">
+                    <xs:annotation>
+                        <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего
+                            запрос</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Id" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор платежа в пакете</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:ID">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="paymentMethod">
+                    <xs:annotation>
+                        <xs:documentation>Способ оплаты начисления.</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="1">
+                                <xs:annotation>
+                                    <xs:documentation>1 - Признак оплаты начисления через СБП.</xs:documentation>
+                                </xs:annotation>
+                            </xs:enumeration>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="requisiteCheckCode" type="com:RequisiteCheckCodeType">
+                    <xs:annotation>
+                        <xs:documentation>КПР</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ImportedRefundType">
+        <xs:complexContent>
+            <xs:extension base="rfnd:RefundType">
+                <xs:attribute name="originatorId" type="com:URNType">
+                    <xs:annotation>
+                        <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего запрос</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Id" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор возвтата в пакете</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:ID">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ImportedClarificationType">
+        <xs:complexContent>
+            <xs:extension base="clrf:ClarificationType">
+                <xs:attribute name="originatorId" type="com:URNType">
+                    <xs:annotation>
+                        <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего
+                            запрос</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Id" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор начисления в пакете</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:ID">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ImportedRenouncementType">
+        <xs:complexContent>
+            <xs:extension base="dv:RenouncementType">
+                <xs:attribute name="originatorId" type="com:URNType">
+                    <xs:annotation>
+                        <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего
+                            запрос</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Id" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор извещения об отказе в пакете</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:ID">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType abstract="false" name="ImportedChangeType">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="SupplierBillId" type="com:SupplierBillIDType">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор начисления</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="PaymentId" type="com:PaymentIdType">
+                    <xs:annotation>
+                        <xs:documentation>УПНО(УИП)</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="RefundId" type="com:RefundIdType">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор возврата</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="IncomeId" type="com:IncomeIdType">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор зачисления</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="ClarificationId" type="com:ClarificationIdType">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор уточнения вида и принадлежности платежа</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="RenouncementID" type="dv:RenouncementIDType">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор извещения об отказе в возбуждении исполнительного производства</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="Change" type="ChangeType">
+                <xs:annotation>
+                    <xs:documentation>Изменяемые поля</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="com:ChangeStatus"> </xs:element>
+        </xs:sequence>
+        <xs:attribute name="originatorId" type="com:URNType">
+            <xs:annotation>
+                <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего запрос</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Id" use="required">
+            <xs:annotation>
+                <xs:documentation>Идентификатор изменяемого извещения в пакете</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:ID">
+                    <xs:maxLength value="50"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ChangeType">
+        <xs:annotation>
+            <xs:documentation>Изменяемые поля</xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="10">
+            <xs:element name="ChangeValue">
+                <xs:annotation>
+                    <xs:documentation>Новое значение изменяемого поля. Множественное значение (до 10 штук) допустимо только для тех полей, в схеме которых определено максимальное количество – больше одного. Изменение множественных полей  выполняется всем передаваемым блоком. Переданные ранее значения в ГИС ГМП не сохраняются</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="name">
+                        <xs:annotation>
+                            <xs:documentation>Наименование изменяемого поля</xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value="\S+([\S\s]*\S+)*"/>
+                                <xs:minLength value="1"/>
+                                <xs:maxLength value="100"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="value" type="ChangeValueType" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Значение изменяемого поля. 
+Если требуется не изменить, а удалить переданное ранее значение поля, то в поле следует указать значение NULL</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="fieldNum" use="required">
+            <xs:annotation>
+                <xs:documentation>Номер поля, в которое вносятся изменения</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="\d+"/>
+                    <xs:maxLength value="4"/>
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:simpleType name="ChangeValueType">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\S+([\S\s]*\S+)*"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="255"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="ChargesPackage">
+        <xs:annotation>
+            <xs:documentation>Пакет содержащий импортируемые начисления</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:restriction base="pkg:PackageType">
+                    <xs:choice>
+                        <xs:element maxOccurs="100" name="ImportedCharge"
+                            type="pkg:ImportedChargeType">
+                            <xs:annotation>
+                                <xs:documentation>Направляемое новое извещение о начислении</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element maxOccurs="100" name="ImportedChange">
+                            <xs:annotation>
+                                <xs:documentation>Направляемые изменения в извещение о начислении</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:restriction base="ImportedChangeType">
+                                        <xs:sequence>
+                                            <xs:sequence>
+                                                <xs:element name="SupplierBillId"
+                                                  type="com:SupplierBillIDType">
+                                                  <xs:annotation>
+                                                  <xs:documentation>Идентификатор начисления</xs:documentation>
+                                                  </xs:annotation>
+                                                </xs:element>
+                                            </xs:sequence>
+                                            <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                name="Change" type="ChangeType">
+                                                <xs:annotation>
+                                                  <xs:documentation>Изменяемые поля</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:element>
+                                            <xs:element ref="com:ChangeStatus"/>
+                                        </xs:sequence>
+                                    </xs:restriction>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PaymentsPackage">
+        <xs:annotation>
+            <xs:documentation>Пакет, содержащий направляемые платежи</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:restriction base="pkg:PackageType">
+                    <xs:choice>
+                        <xs:element maxOccurs="100" name="ImportedPayment"
+                            type="pkg:ImportedPaymentType">
+                            <xs:annotation>
+                                <xs:documentation>Направляемый новое извещение о приеме к исполнению распоряжения</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element maxOccurs="100" name="ImportedChange">
+                            <xs:annotation>
+                                <xs:documentation>Направляемые изменения в извещение о приеме к исполнению распоряжения</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:restriction base="ImportedChangeType">
+                                        <xs:sequence>
+                                            <xs:sequence>
+                                                <xs:element name="PaymentId"
+                                                  type="com:PaymentIdType">
+                                                  <xs:annotation>
+                                                      <xs:documentation>УПНО(УИП)</xs:documentation>
+                                                  </xs:annotation>
+                                                </xs:element>
+                                            </xs:sequence>
+                                            <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                name="Change" type="ChangeType">
+                                                <xs:annotation>
+                                                  <xs:documentation>Изменяемые поля</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:element>
+                                            <xs:element ref="com:ChangeStatus"/>
+                                        </xs:sequence>
+                                    </xs:restriction>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="RefundsPackage">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:restriction base="pkg:PackageType">
+                    <xs:choice>
+                        <xs:element maxOccurs="100" name="ImportedRefund"
+                            type="pkg:ImportedRefundType">
+                            <xs:annotation>
+                                <xs:documentation>Направляемое новое извещение о возврате</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element maxOccurs="100" name="ImportedChange">
+                            <xs:annotation>
+                                <xs:documentation>Направляемые изменения в извещение о возврате</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:restriction base="ImportedChangeType">
+                                        <xs:sequence>
+                                            <xs:choice>
+                                                <xs:element name="RefundId" type="com:RefundIdType">
+                                                  <xs:annotation>
+                                                  <xs:documentation>Идентификатор возврата</xs:documentation>
+                                                  </xs:annotation>
+                                                </xs:element>
+                                            </xs:choice>
+                                            <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                name="Change" type="ChangeType">
+                                                <xs:annotation>
+                                                  <xs:documentation>Изменяемые поля</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:element>
+                                            <xs:element ref="com:ChangeStatus"> </xs:element>
+                                        </xs:sequence>
+                                    </xs:restriction>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="IncomesPackage">
+        <xs:annotation>
+            <xs:documentation>Пакет, содержащий направляемые зачисления</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:restriction base="PackageType">
+                    <xs:choice>
+                        <xs:element maxOccurs="100" name="ImportedIncome" type="ImportedIncomeType">
+                            <xs:annotation>
+                                <xs:documentation>Направляемое новое извещение о зачислении</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element maxOccurs="100" name="ImportedChange">
+                            <xs:annotation>
+                                <xs:documentation>Направляемые изменения в извещение о зачислении</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:restriction base="ImportedChangeType">
+                                        <xs:sequence>
+                                            <xs:sequence>
+                                                <xs:element name="IncomeId" type="com:IncomeIdType">
+                                                  <xs:annotation>
+                                                  <xs:documentation>Идентификатор зачисления</xs:documentation>
+                                                  </xs:annotation>
+                                                </xs:element>
+                                            </xs:sequence>
+                                            <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                name="Change" type="ChangeType">
+                                                <xs:annotation>
+                                                  <xs:documentation>Изменяемые поля</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:element>
+                                            <xs:element ref="com:ChangeStatus"/>
+                                        </xs:sequence>
+                                    </xs:restriction>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="ImportedIncomeType">
+        <xs:complexContent>
+            <xs:extension base="inc:IncomeType">
+                <xs:attribute name="originatorId" type="com:URNType">
+                    <xs:annotation>
+                        <xs:documentation>УРН участника косвенного взаимодействия, сформировавшего запрос</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Id" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Идентификатор зачисления в пакете</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:ID">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="ClarificationsPackage">
+        <xs:annotation>
+            <xs:documentation>Пакет содержащий импортируемые уточнении вида и принадлежности платежа</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:restriction base="PackageType">
+                    <xs:choice>
+                        <xs:element maxOccurs="100" name="ImportedClarification"
+                            type="pkg:ImportedClarificationType">
+                            <xs:annotation>
+                                <xs:documentation>Направляемое новое уточнении вида и принадлежности платежа</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element maxOccurs="100" name="ImportedChange">
+                            <xs:annotation>
+                                <xs:documentation>Направляемые изменения в извещение о уточнении вида и принадлежности платежа</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:restriction base="ImportedChangeType">
+                                        <xs:sequence>
+                                            <xs:sequence>
+                                                <xs:element name="ClarificationId"
+                                                  type="com:ClarificationIdType">
+                                                  <xs:annotation>
+                                                  <xs:documentation>Идентификатор уточнении вида и принадлежности платежа</xs:documentation>
+                                                  </xs:annotation>
+                                                </xs:element>
+                                            </xs:sequence>
+                                            <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                name="Change" type="ChangeType">
+                                                <xs:annotation>
+                                                  <xs:documentation>Изменяемые поля</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:element>
+                                            <xs:element ref="com:ChangeStatus"/>
+                                        </xs:sequence>
+                                    </xs:restriction>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="RenouncementPackage">
+        <xs:annotation>
+            <xs:documentation>Пакет, содержащий направляемые извещения об отказе в возбуждении ИП</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:restriction base="PackageType">
+                    <xs:choice>
+                        <xs:element maxOccurs="100" name="ImportedRenouncement"
+                            type="ImportedRenouncementType">
+                            <xs:annotation>
+                                <xs:documentation>Направляемое новое извещение об отказе в возбуждении ИП</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

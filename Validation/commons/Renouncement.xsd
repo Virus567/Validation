@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+	targetNamespace="http://roskazna.ru/gisgmp/xsd/Renouncement/2.4.0"
+	elementFormDefault="qualified" xmlns:dv="http://roskazna.ru/gisgmp/xsd/Renouncement/2.4.0"
+	xmlns:ns2="http://roskazna.ru/gisgmp/xsd/Common/2.4.0">
+	<xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" schemaLocation="Common.xsd"/>
+	<xsd:complexType name="RenouncementType">
+		<xsd:sequence>
+			<xsd:element name="Approver">
+				<xsd:annotation>
+					<xsd:documentation>Информация об утверждении постановления об отказе в возбуждении ИП</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="positionCode" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Код должности СПИ/должностного лица ФССП России, утвердившего документ</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="25"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="positionName" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Наименование должности лица, утвердившего документ</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="255"/>
+								<xsd:pattern value="\S+([\S\s]*\S+)*"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="personApproving" use="required">
+						<xsd:annotation>
+							<xsd:documentation>ФИО лица, утвердившего документ</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="com:FIOFSSPType"/>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="approvalDate" type="xsd:date" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Дата утверждения</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Executor">
+				<xsd:annotation>
+					<xsd:documentation>Данные должностного лица (исполнителя), вынесшего постановление об отказе</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="VKSPCode" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Код ВКСП</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern value="\d{5}"/>
+								<xsd:length value="5"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="structuralUnitName" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Наименование структурного подразделения ФССП</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="1000"/>
+								<xsd:pattern value="\S+([\S\s]*\S+)*"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="structuralUnitAddress" type="com:AdrType" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Адрес структурного подразделения ФССП России</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="structuralLocality" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Населенный пункт структурного подразделения ФССП России</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="80"/>
+								<xsd:pattern value="\S+([\S\s]*\S+)*"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="executorFullName" type="com:FIOFSSPType" use="required">
+						<xsd:annotation>
+							<xsd:documentation>ФИО судебного пристава-исполнителя</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element ref="com:DeedInfo">
+				<xsd:annotation>
+					<xsd:documentation>Данные исполнительного документа, по которому вынесено постановление об отказе в возбуждении ИП</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="supplierBillID" type="com:SupplierBillIDType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Уникальный идентификатор начисления (УИН)</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="renouncementID" type="dv:RenouncementIDType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Идентификатор извещения об отказе в возбуждении исполнительного производства</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rulingDate" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Дата постановления об отказе в возбуждении ИП</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rulingNum" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Номер постановления об отказе в возбуждении ИП</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1"/>
+					<xsd:maxLength value="25"/>
+					<xsd:pattern value="\S+([\S\s]*\S+)*"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="refusalGround" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Обстоятельства, послужившие основанием для отказа в возбуждении ИП</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1"/>
+					<xsd:maxLength value="1000"/>
+					<xsd:pattern value="\S+([\S\s]*\S+)*"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="reasonCode" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Код причины отказа (пункт ч. 1 ст. 31 Федерального закона от 02.10.2007 N 229-ФЗ)</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1"/>
+					<xsd:maxLength value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:simpleType name="RenouncementIDType">
+		<xsd:annotation>
+			<xsd:documentation>Идентификатор извещения об отказе в возбуждении исполнительного производства</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="F[0-9a-fA-F]{6}((0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])\d{4})\d{10}"/>
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="25"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

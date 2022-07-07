@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
+    xmlns:pmnt="http://roskazna.ru/gisgmp/xsd/Payment/2.4.0"
+    targetNamespace="http://roskazna.ru/gisgmp/xsd/Income/2.4.0" elementFormDefault="qualified"
+    xmlns="http://roskazna.ru/gisgmp/xsd/Income/2.4.0"
+    xmlns:org="http://roskazna.ru/gisgmp/xsd/Organization/2.4.0">
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" schemaLocation="Common.xsd"/>
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Organization/2.4.0"
+        schemaLocation="Organization.xsd"/>
+    <xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Payment/2.4.0" schemaLocation="Payment.xsd"/>
+    <xsd:complexType name="IncomeType">
+        <xsd:complexContent>
+            <xsd:extension base="pmnt:PaymentBaseType">
+                <xsd:sequence>
+                    <xsd:element name="IncomeIndex" minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation>Поле 4010:
+                                Реквизиты зачисления после обработки и классификации кредитовых распоряжений</xsd:documentation>
+                        </xsd:annotation>
+                        <xsd:complexType>
+                            <xsd:attribute name="kbk" type="com:KBKType">
+                                <xsd:annotation>
+                                    <xsd:documentation>Поле номер 4011:
+                                        КБК после обработки и классификации кредитовых распоряжений</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                            <xsd:attribute name="oktmo" type="com:OKTMOType">
+                                <xsd:annotation>
+                                    <xsd:documentation>Поле номер 4012:
+                                        ОКТМО после обработки и классификации кредитовых распоряжений</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                            <xsd:attribute name="inn" type="com:INNType">
+                                <xsd:annotation>
+                                    <xsd:documentation>Поле номер 4013:
+                                        ИНН получателя после обработки и классификации кредитовых распоряжений</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                            <xsd:attribute name="kpp" type="com:KPPType">
+                                <xsd:annotation>
+                                    <xsd:documentation>Поле номер 4014:
+                                        КПП получателя после обработки и классификации кредитовых распоряжений</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                            <xsd:attribute name="accountNumber" type="com:AccountNumType">
+                                <xsd:annotation>
+                                    <xsd:documentation>Поле номер 4015:
+                                        Номер казначейского счета получателя средств после обработки и классификации кредитовых распоряжений</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+                <xsd:attribute name="transactionID">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 4004:Номер записи в реестре</xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:maxLength value="5"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:attribute>
+                <xsd:attribute name="edDate" type="xsd:date" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 4005: Дата составления электронного сообщения</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="incomeId" type="com:IncomeIdType" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Уникальный идентификатор зачисления</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="incomeDate" type="xsd:dateTime" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 4001: Дата и время формирования
+                            документа
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="edCode" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 4002: Обозначение электронного сообщения в
+                            унифицированных форматах электронных банковских сообщений Банка России,
+                            на основании которого сформировано зачисление
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="ED101"/>
+                            <xsd:enumeration value="ED104"/>
+                            <xsd:enumeration value="ED105"/>
+                            <xsd:enumeration value="ED108"/>
+                            <xsd:enumeration value="ED701"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:attribute>
+                <xsd:attribute name="edNo" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 4200: Номер электронного сообщения в течение
+                            опердня
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:maxLength value="9"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:attribute>
+                <xsd:attribute name="chargeOffDate" type="xsd:date">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 71: Дата списания денежных средств со счета
+                            плательщика
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="isUncertain" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 4003: Признак отнесения платежа к
+                            невыясненным
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:boolean"/>
+                    </xsd:simpleType>
+                </xsd:attribute>
+                <xsd:attribute name="paymentId" type="com:PaymentIdType">
+                    <xsd:annotation>
+                        <xsd:documentation>Поле номер 2000:УПНО(УИП)</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+</xsd:schema>
+
+

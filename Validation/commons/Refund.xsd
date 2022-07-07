@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:org="http://roskazna.ru/gisgmp/xsd/Organization/2.4.0" xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" xmlns:rfnd="http://roskazna.ru/gisgmp/xsd/Refund/2.4.0" xmlns:ns1="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" targetNamespace="http://roskazna.ru/gisgmp/xsd/Refund/2.4.0" elementFormDefault="qualified">
+	<xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Organization/2.4.0" schemaLocation="Organization.xsd"/>
+	<xsd:import namespace="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" schemaLocation="Common.xsd"/>
+	<xsd:complexType name="RefundType">
+		<xsd:annotation>
+			<xsd:documentation>Базовый тип для возврата</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element ref="org:RefundPayer">
+				<xsd:annotation>
+					<xsd:documentation>Сведения об организации, осуществляющей возврат денежных средств</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RefundApplication">
+				<xsd:annotation>
+					<xsd:documentation>Данные заявки на возврат</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="appNum" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 3:
+Номер, присвоенный организацией, формирующей Заявку на возврат в ТОФК
+                            </xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="15"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="appDate" type="xsd:date" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 4:
+Дата, на которую сформирована Заявка на возврат в ТОФК</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="paymentId" type="com:PaymentIdType" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 2000:
+УПНО(УИП)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="cashType" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 3004:
+Вид средств для осуществления возврата.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:int">
+								<xsd:enumeration value="1">
+									<xsd:annotation>
+										<xsd:documentation>средства бюджета</xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="3">
+									<xsd:annotation>
+										<xsd:documentation>средства дополнительного бюджетного финансирования</xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="4">
+									<xsd:annotation>
+										<xsd:documentation>средства для финансирования мероприятий по оперативно-розыскной
+                                            деятельности
+                                        </xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="5">
+									<xsd:annotation>
+										<xsd:documentation>средства, поступающие во временное распоряжение казенных
+                                            учреждений
+                                        </xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+								<xsd:enumeration value="6">
+									<xsd:annotation>
+										<xsd:documentation>средства юридического лица</xsd:documentation>
+									</xsd:annotation>
+								</xsd:enumeration>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="amount" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 7:
+Сумма возврата в копейках</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:unsignedLong">
+								<xsd:minInclusive value="1"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="purpose" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 24:
+Назначение платежа</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:maxLength value="210"/>
+								<xsd:pattern value="\S+([\S\s]*\S+)*"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RefundBasis">
+				<xsd:annotation>
+					<xsd:documentation>Реквизиты документа-основания для осуществления возврата</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:attribute name="docKind" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 3005:
+Вид документа-основания для осуществления возврата для осуществления возврата
+                            </xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="160"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="docNumber" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 3006:
+Номер документа-основания для осуществления возврата</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern value="\d{1,6}"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="docDate" type="xsd:date" use="required">
+						<xsd:annotation>
+							<xsd:documentation>Поле номер 3007:
+Дата документа-основания для осуществления возврата</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RefundPayee">
+				<xsd:annotation>
+					<xsd:documentation>Получатель денежных средств</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="rfnd:PayeeType">
+							<xsd:sequence>
+								<xsd:element name="BankAccountNumber" type="com:AccountType">
+									<xsd:annotation>
+										<xsd:documentation>Номер счета получателя платежа</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="PayeeAccount" type="com:PayeeAccountType" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Поле номер 3008:
+Номер лицевого счета получателя платежа. Заполняется только в случае, если документ исполняется вне банковской операцией на счета ТОФК, отличных от счета по учету поступлений.
+                                </xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required">
+								<xsd:annotation>
+									<xsd:documentation>Поле номер 8:
+Наименование получателя денежных средств Особенности заполнения:
+- для ЮЛ указывается наименование организации;
+- для ФЛ указывается фамилия, имя, отчество (при наличии);
+- для ИП указывается фамилия, имя, отчество (при наличии) ИП.
+                            </xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:minLength value="1"/>
+										<xsd:maxLength value="160"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:attribute>
+							<xsd:attribute name="kbk" type="com:KBKType">
+								<xsd:annotation>
+									<xsd:documentation>Поле номер 3104:
+КБК. Заполняется в случае, если получателем платежа является контрагент, соответствующий лицевой счет которого открыт ТОФК или финансовой организацией
+                            </xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+							<xsd:attribute name="oktmo" type="com:OKTMOType">
+								<xsd:annotation>
+									<xsd:documentation>Поле номер 3105:
+Код ОКТМО. Заполняется в случае перечисления денежных средств в бюджетную систему Российской Федерации
+                            </xsd:documentation>
+								</xsd:annotation>
+							</xsd:attribute>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element ref="com:AdditionalData" minOccurs="0" maxOccurs="10">
+				<xsd:annotation>
+					<xsd:documentation>Поле номер 202:
+Дополнительные поля</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="refundId" type="com:RefundIdType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Уникальный идентификатор извещения о возврате (УИВ)</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="refundDocDate" type="xsd:dateTime" use="required" form="unqualified">
+			<xsd:annotation>
+				<xsd:documentation>Поле номер 3001:
+Дата и время формирования извещения о возврате</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="budgetLevel" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Поле номер 3002:
+Уровень бюджета. Допустимые значения: 
+1 - «федеральный»;
+2 – «бюджет субъекта РФ»;
+3 – «местный бюджет»;
+4 – «бюджет ГВФ РФ»;
+5 – «бюджет ТГВФ РФ»;
+6 – «средства ЮЛ».
+                </xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="1"/>
+					<xsd:enumeration value="2"/>
+					<xsd:enumeration value="3"/>
+					<xsd:enumeration value="4"/>
+					<xsd:enumeration value="5"/>
+					<xsd:enumeration value="6"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="kbk" type="com:KBKType">
+			<xsd:annotation>
+				<xsd:documentation>Поле номер 104:
+КБК. Для БУ в позициях с 18 по 20 указывается код по бюджетной классификации. Для АУ, ФГУП, ГУП, МУП в случаях, предусмотренных НПА, в позициях с 18 по 20 указывается код по бюджетной классификации.
+В случае отсутствия следует указывать значение «0».
+                </xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="oktmo" type="com:OKTMOType">
+			<xsd:annotation>
+				<xsd:documentation>Поле номер 105:
+Код ОКТМО. В случае отсутствия следует указывать значение «0».</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="PayeeType">
+		<xsd:complexContent>
+			<xsd:restriction base="com:PayerType">
+				<xsd:attribute name="payerIdentifier" use="required">
+					<xsd:annotation>
+						<xsd:documentation>Поле номер 201:
+Идентификатор плательщика</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="com:PayerIdentifierType">
+							<xsd:length value="22"/>
+							<xsd:pattern value="1((0[1-9])|(1[0-5])|(2[12456789])|(3[0]))[0-9a-zA-Zа-яА-Я]{19}">
+								<xsd:annotation>
+									<xsd:documentation>Идентификатор ФЛ</xsd:documentation>
+								</xsd:annotation>
+							</xsd:pattern>
+							<xsd:pattern value="200\d{14}[A-Z0-9]{2}\d{3}">
+								<xsd:annotation>
+									<xsd:documentation>Идентификатор ЮЛ или ИП</xsd:documentation>
+								</xsd:annotation>
+							</xsd:pattern>
+							<xsd:pattern value="300[0-9a-zA-Zа-яА-Я]{19}"/>
+							<xsd:pattern value="4[0]{9}\d{12}"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

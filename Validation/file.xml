@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<req:ImportChargesRequest xmlns:org="http://roskazna.ru/gisgmp/xsd/Organization/2.4.0" xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0" xmlns:chg="http://roskazna.ru/gisgmp/xsd/Charge/2.4.0" xmlns:pkg="http://roskazna.ru/gisgmp/xsd/Package/2.4.0" xmlns:req="urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0" xmlns:rfd="http://roskazna.ru/gisgmp/xsd/Refund/2.4.0" xmlns:pmnt="http://roskazna.ru/gisgmp/xsd/Payment/2.4.0" Id="G_fce0c544-b08d-44bc-83d8-738f10e9d068" timestamp="2020-09-30T15:27:53.045+03:00" senderIdentifier="3eacb7" senderRole="1">
+	<pkg:ChargesPackage>
+		<pkg:ImportedCharge Id="I_54a59db2-3845-4915-8770-dd95394aadb4" originatorId="3eb5fa" supplierBillID="32116102414550976332" billDate="2020-09-30T14:06:30.313+03:00" totalAmount="5000.00" purpose="Плата за предоставление сведений из Единого государственного реестра недвижимости от 23.05.2011 для участника Всероссийского профессионального конкурса «Флагманы образования. Студенты»
+для обучающихся профессиональных образовательных организаций и организаций высшего образования" kbk="32111301031016000130" oktmo="45348000">
+			<org:Payee name="ФГБУ «ФКП Росреестра» по г Москва" inn="7705401341" kpp="770542151" ogrn="7723819340452">
+				<com:OrgAccount accountNumber="03100643000000019500">
+					<com:Bank name="ОПЕРАЦИОННЫЙ ДЕПАРТАМЕНТ БАНКА РОССИИ//Межрегиональное операционное управление Федерального казначейства г. Москва" bik="0245019010" correspondentBankAccount="40102810045370000002"/>
+				</com:OrgAccount>
+			</org:Payee>
+			<chg:Payer payerIdentifier="1220000000007712579832" payerName="Тестовый плательщик"/>
+			<chg:BudgetIndex status="01" paytReason="0" taxPeriod="0" taxDocNumber="0" taxDocDate="0"/>
+		</pkg:ImportedCharge>
+	</pkg:ChargesPackage>
+</req:ImportChargesRequest>

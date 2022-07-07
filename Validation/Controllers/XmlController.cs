@@ -40,9 +40,6 @@ namespace Validation.Controllers
                 file.CopyTo(fileStream);
             }
             var path = new Uri(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)).LocalPath;
-            //XmlSchemaSet schema = new XmlSchemaSet();
-            //schema.Add("urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0", path + "\\ImportPayments.xsd");
-            //schema.Add("urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0", path + "\\ImportCharges.xsd");
 
             XmlReader reader = null;
             string result = "";
@@ -52,7 +49,7 @@ namespace Validation.Controllers
                 settings.ValidationType = ValidationType.Schema;
                 settings.Schemas.Add("urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0", path + "\\ImportPayments.xsd");
                 settings.Schemas.Add("urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0", path + "\\ImportCharges.xsd");
-                settings.Schemas.XmlResolver = new XmlUrlResolver();
+
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
                 settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandle);
@@ -60,19 +57,6 @@ namespace Validation.Controllers
                 reader = XmlReader.Create(filePath, settings);
                 while (reader.Read()) { }
                 result = "Валидация пройдена успешно!";
-
-                //XDocument doc = XDocument.Load(reader);
-                //try
-                //{
-                //    doc.Validate(schema, ValidationEventHandler);
-
-                //    return "Валидация пройдена успешно!";
-                //}
-                //catch (Exception ex)
-                //{
-
-                //    return "Валидация не пройдена: " + ex.Message;
-                //}
             }
             catch (Exception ex)
             {
@@ -82,9 +66,10 @@ namespace Validation.Controllers
             {
                 if (reader != null)
                 {
-                    reader.Close(); 
+                    reader.Close();        
+                    System.IO.File.Delete(fullPath);
                 }
-                System.IO.File.Delete(fullPath);
+                
             }
             return result;
         }
