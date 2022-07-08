@@ -41,33 +41,53 @@ namespace Validation.Controllers
                 file.CopyTo(fileStream);
             }
             var path = new Uri(Directory.GetCurrentDirectory());
-
+            string res = "";
             XmlReader reader = null;
             string result = "";
             try       
             {
-                //XmlSchemaSet schema = new XmlSchemaSet();
-                //schema.Add("urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0", path + "\\ImportPayments.xsd");
-                //schema.Add("urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0", path + "\\ImportCharges.xsd");
-                //schema.XmlResolver = new XmlUrlResolver();
-                //XmlReader rd = XmlReader.Create(filePath);
-                //XDocument doc = XDocument.Load(rd);
-                //doc.Validate(schema, ValidationEventHandle);
-                XmlReaderSettings settings = new XmlReaderSettings();
-                settings.ValidationType = ValidationType.Schema;
-                settings.Schemas.Add("urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0", path + "\\ImportPayments.xsd");
-                settings.Schemas.Add("urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0", path + "\\ImportCharges.xsd");
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
-                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandle);
-                settings.XmlResolver = new XmlUrlResolver();
-                reader = XmlReader.Create(filePath, settings);
-                while (reader.Read()) { }
+                XmlSchemaSet schema = new XmlSchemaSet();
+                schema.Add(new XmlSchema
+                {
+                    SourceUri = path + "\\ImportPayments.xsd",
+                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
+                });
+
+                schema.Add(new XmlSchema
+                {
+                    SourceUri = path + "\\ImportCharges.xsd",
+                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
+                });
+                schema.XmlResolver = new XmlUrlResolver();
+                reader = XmlReader.Create(filePath);
+                XDocument doc = XDocument.Load(reader);
+                doc.Validate(schema, ValidationEventHandle);
+
+                //XmlReaderSettings settings = new XmlReaderSettings();
+                //settings.ValidationType = ValidationType.Schema;
+                //settings.Schemas.Add(new XmlSchema
+                //{
+                //    SourceUri = path + "\\ImportPayments.xsd",
+                //    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
+                //});
+                //settings.Schemas.Add(new XmlSchema
+                //{
+                //    SourceUri = path + "\\ImportCharges.xsd",
+                //    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
+                //});
+                //settings.Schemas.Compile();
+                //settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+                //settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                //settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandle);
+                //reader = XmlReader.Create(filePath, settings);
+                //while (reader.Read()) {
+                //    res = reader.Value;
+                //}
                 result = "Валидация пройдена успешно!";
             }
             catch (Exception ex)
             {
-                result = "Ошибка валидации: " + ex.Message;
+                result = $"Ошибка валидации! " + ex.Message;
             }
             finally
             {
@@ -83,7 +103,7 @@ namespace Validation.Controllers
 
         static void ValidationEventHandle(object sender, ValidationEventArgs e)
         {
-            throw new Exception("Валидация не пройдена: " + e.Message);
+            throw new Exception(e.Message);
         }
     }
 }
