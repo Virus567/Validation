@@ -46,43 +46,45 @@ namespace Validation.Controllers
             string result = "";
             try       
             {
-                XmlSchemaSet schema = new XmlSchemaSet();
-                schema.Add(new XmlSchema
-                {
-                    SourceUri = path + "\\ImportPayments.xsd",
-                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
-                });
-
-                schema.Add(new XmlSchema
-                {
-                    SourceUri = path + "\\ImportCharges.xsd",
-                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
-                });
-                schema.XmlResolver = new XmlUrlResolver();
-                reader = XmlReader.Create(filePath);
-                XDocument doc = XDocument.Load(reader);
-                doc.Validate(schema, ValidationEventHandle);
-
-                //XmlReaderSettings settings = new XmlReaderSettings();
-                //settings.ValidationType = ValidationType.Schema;
-                //settings.Schemas.Add(new XmlSchema
+                //XmlSchemaSet schema = new XmlSchemaSet();
+                //schema.Add(new XmlSchema
                 //{
                 //    SourceUri = path + "\\ImportPayments.xsd",
                 //    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
                 //});
-                //settings.Schemas.Add(new XmlSchema
+
+                //schema.Add(new XmlSchema
                 //{
                 //    SourceUri = path + "\\ImportCharges.xsd",
                 //    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
                 //});
-                //settings.Schemas.Compile();
-                //settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
-                //settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                //settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandle);
-                //reader = XmlReader.Create(filePath, settings);
-                //while (reader.Read()) {
-                //    res = reader.Value;
-                //}
+                //schema.Compile();
+                //schema.XmlResolver = new XmlUrlResolver();
+                //reader = XmlReader.Create(filePath);
+                //XDocument doc = XDocument.Load(reader);
+                //doc.Validate(schema, ValidationEventHandle);
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.ValidationType = ValidationType.Schema;
+                settings.Schemas.Add(new XmlSchema
+                {
+                    SourceUri = path + "\\ImportPayments.xsd",
+                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0",
+                });
+                settings.Schemas.Add(new XmlSchema
+                {
+                    SourceUri = path + "\\ImportCharges.xsd",
+                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
+                });
+                settings.Schemas.Compile();
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+                settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandle);
+                reader = XmlReader.Create(filePath, settings);
+                while (reader.Read())
+                {
+                    res = reader.Value;
+                }
                 result = "Валидация пройдена успешно!";
             }
             catch (Exception ex)
