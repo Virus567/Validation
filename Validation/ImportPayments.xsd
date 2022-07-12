@@ -2,7 +2,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns:com="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
     xmlns:pkg="http://roskazna.ru/gisgmp/xsd/Package/2.4.0"
-    xmlns="urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
+    xmlns:req="urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
     targetNamespace="urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
     elementFormDefault="qualified" xmlns:ns1="http://roskazna.ru/gisgmp/xsd/Common/2.4.0"
     xmlns:ns2="http://roskazna.ru/gisgmp/xsd/Package/2.4.0">

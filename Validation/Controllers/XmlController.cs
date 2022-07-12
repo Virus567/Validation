@@ -10,9 +10,26 @@ namespace Validation.Controllers
     public class XmlController : Controller
     {
         private readonly ILogger<XmlController> _logger;
+        private readonly XmlSchemaSet _schemas;
+        private static List<string> _errors;
+        private static int _errorCount;
         public XmlController(ILogger<XmlController> logger)
         {
+            _errors = new List<string>();
+            _errorCount = 0;
             _logger = logger;
+            _schemas = new XmlSchemaSet();
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\ImportCharges.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\ImportPayments.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Common.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Package.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Charge.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Clarification.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Income.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Payment.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Organization.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Refund.xsd"), ValidationEventHandle!)!);
+            _schemas.Add(XmlSchema.Read(new XmlTextReader(Directory.GetCurrentDirectory() + "\\commons\\Renouncement.xsd"), ValidationEventHandle!)!);
         }
 
         public IActionResult XmlValidate()
@@ -40,72 +57,56 @@ namespace Validation.Controllers
             {
                 file.CopyTo(fileStream);
             }
-            var path = new Uri(Directory.GetCurrentDirectory());
-            string res = "";
             XmlReader reader = null;
             string result = "";
-            try       
+            try
             {
-                //XmlSchemaSet schema = new XmlSchemaSet();
-                //schema.Add(new XmlSchema
-                //{
-                //    SourceUri = path + "\\ImportPayments.xsd",
-                //    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0"
-                //});
-
-                //schema.Add(new XmlSchema
-                //{
-                //    SourceUri = path + "\\ImportCharges.xsd",
-                //    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
-                //});
-                //schema.Compile();
-                //schema.XmlResolver = new XmlUrlResolver();
-                //reader = XmlReader.Create(filePath);
-                //XDocument doc = XDocument.Load(reader);
-                //doc.Validate(schema, ValidationEventHandle);
 
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.ValidationType = ValidationType.Schema;
-                settings.Schemas.Add(new XmlSchema
-                {
-                    SourceUri = path + "\\ImportPayments.xsd",
-                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-payments/2.4.0",
-                });
-                settings.Schemas.Add(new XmlSchema
-                {
-                    SourceUri = path + "\\ImportCharges.xsd",
-                    TargetNamespace = "urn://roskazna.ru/gisgmp/xsd/services/import-charges/2.4.0"
-                });
-                settings.Schemas.Compile();
+                settings.Schemas = _schemas;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
                 settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
-                settings.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandle);
+                settings.ValidationEventHandler += ValidationEventHandle!;
                 reader = XmlReader.Create(filePath, settings);
                 while (reader.Read())
                 {
-                    res = reader.Value;
                 }
-                result = "Валидация пройдена успешно!";
             }
             catch (Exception ex)
             {
-                result = $"Ошибка валидации! " + ex.Message;
+                _errorCount++;
+                result =$"{_errorCount}. Ошибка валидации!{ex.Message} \n";
+
             }
             finally
             {
                 if (reader != null)
                 {
-                    reader.Close();        
+                    reader.Close();
                     System.IO.File.Delete(fullPath);
                 }
-                
+
+            }
+
+            if (_errors.Count == 0 && result=="")
+            {
+                result = "Валидация прошла успешно!";
+            }
+        
+            foreach (var error in _errors)
+            {
+                result += error + "\n";
             }
             return result;
+
         }
+
 
         static void ValidationEventHandle(object sender, ValidationEventArgs e)
         {
-            throw new Exception(e.Message);
+            _errorCount++;
+            _errors.Add($"{_errorCount}. Ошибка валидации! В строке {e.Exception.LineNumber}, позиция {e.Exception.LinePosition} - {e.Message}");
         }
     }
 }
